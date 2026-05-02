@@ -13,8 +13,10 @@ defaults:
 # UI Labels (Configurable without touching HTML)
 ui:
   theme_button: "Switch Mode"
-  menu_header: "Gitslate"
   default_section_label: "Links"
+  menu_header: "Gitslate"
+  prev_label: "Previous"
+  next_label: "Next"
 
 # Jekyll Settings
 remote_theme: jekyll/minima
