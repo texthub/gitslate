@@ -193,6 +193,60 @@
         justify-content: center;
         gap: 2rem;
     }
+
+    .chapter-nav .nav-links {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .nav-btn {
+        text-decoration: none;
+        color: var(--text-color);
+        padding: 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        width: 48%; /* Ensures two buttons sit side-by-side */
+        display: flex;
+        flex-direction: column;
+        transition: all 0.2s ease;
+        background: var(--sidebar-bg);
+    }
+
+    .nav-btn:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .nav-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.5;
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        line-height: 1.3;
+    }
+
+    .nav-spacer {
+        width: 48%;
+    }
+    
+    @media (max-width: 600px) {
+        .chapter-nav .nav-links {
+            flex-direction: column;
+        }
+        .nav-btn, .nav-spacer {
+            width: 100%;
+        }
+    }
+    
     </style>
 </head>
 <body id="body-tag">
@@ -230,51 +284,54 @@
         </article>
 
         <!-- FOOTER SECTION -->
-        <footer class="slate-footer">
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem;">
-            
-            <!-- Chronological Navigation -->
-            <div class="chapter-nav">
-                {% assign nav_items = "" | split: "," %}
-                {% for section in site.data.navigation.main_menu %}
-                    {% for item in section.sub_items %}
-                        {% assign nav_items = nav_items | push: item %}
-                    {% endfor %}
-                {% endfor %}
+<footer class="slate-footer">
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem;">
+    
+    <div class="chapter-nav">
+        {% assign nav_items = "" | split: "," %}
+        {% for section in site.data.navigation.main_menu %}
+            {% for item in section.sub_items %}
+                {% assign nav_items = nav_items | push: item %}
+            {% endfor %}
+        {% endfor %}
 
-                {% for item in nav_items %}
-                    {% if item.url == page.url %}
-                        {% assign curr_index = forloop.index0 %}
-                        {% assign prev_index = curr_index | minus: 1 %}
-                        {% assign next_index = curr_index | plus: 1 %}
+        {% for item in nav_items %}
+            {% if item.url == page.url %}
+                {% assign curr_index = forloop.index0 %}
+                {% assign prev_index = curr_index | minus: 1 %}
+                {% assign next_index = curr_index | plus: 1 %}
 
-                        <div class="nav-links">
-                            {% if prev_index >= 0 %}
-                            <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-prev">
-                                <span class="nav-label">Previous</span>
-                                <span class="nav-title">{{ nav_items[prev_index].title }}</span>
-                            </a>
-                            {% else %}
-                            <div></div> <!-- Spacer -->
-                            {% endif %}
-
-                            {% if next_index < nav_items.size %}
-                            <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-next">
-                                <span class="nav-label">Next</span>
-                                <span class="nav-title">{{ nav_items[next_index].title }}</span>
-                            </a>
-                            {% endif %}
-                        </div>
+                <div class="nav-links">
+                    <!-- PREVIOUS BUTTON -->
+                    {% if prev_index >= 0 %}
+                    <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn nav-prev">
+                        <span class="nav-label">{{ site.ui.prev_label | default: "Previous" }}</span>
+                        <span class="nav-title">{{ nav_items[prev_index].title }}</span>
+                    </a>
+                    {% else %}
+                    <div class="nav-spacer"></div>
                     {% endif %}
-                {% endfor %}
-            </div>
 
-            <!-- Meta Information -->
-            <div class="footer-meta">
-                <p>Published: {{ page.date | date: "%Y-%m-%d" | default: site.time | date: "%Y-%m-%d" }}</p>
-                <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }}</p>
-            </div>
-        </footer>
+                    <!-- NEXT BUTTON -->
+                    {% if next_index < nav_items.size %}
+                    <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn nav-next">
+                        <span class="nav-label">{{ site.ui.next_label | default: "Next" }}</span>
+                        <span class="nav-title">{{ nav_items[next_index].title }}</span>
+                    </a>
+                    {% else %}
+                    <div class="nav-spacer"></div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Meta Information -->
+    <div class="footer-meta">
+        <p>Published: {{ page.date | date: "%Y-%m-%d" | default: site.time | date: "%Y-%m-%d" }}</p>
+        <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }}</p>
+    </div>
+</footer>
     </main>
 
     <script>
