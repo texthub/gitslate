@@ -8,7 +8,7 @@ defaults:
   - scope:
       path: "" # applies to all files in the repo
     values:
-      layout: "default" # Now you don't even need to write 'layout: default' in every file!
+      layout: "default" # default layout selected
 
 # UI Labels (Configurable without touching HTML)
 ui:
