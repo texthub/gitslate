@@ -37,3 +37,5 @@ For Gitslate to wrap your existing texts, add this **Front Matter** block to the
 layout: default
 title: Name of this Page
 ---
+```
+
