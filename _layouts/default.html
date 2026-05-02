@@ -241,14 +241,20 @@
                 {% endfor %}
 
                 {% for item in nav_items %}
-                    <!-- We compare based on URLs. Using relative_url for robustness -->
-                    {% assign current_url = page.url %}
-                    {% if item.url == current_url %}
+                    {% comment %} 
+                      Normalize URLs to ensure comparison works even if 
+                      one has a leading/trailing slash and the other doesn't.
+                    {% endcomment %}
+                    {% assign item_url = item.url | relative_url | append: "/" | replace: "//", "/" %}
+                    {% assign current_url = page.url | relative_url | append: "/" | replace: "//", "/" %}
+                
+                    {% if item_url == current_url %}
                         {% assign curr_index = forloop.index0 %}
                         {% assign prev_index = curr_index | minus: 1 %}
                         {% assign next_index = curr_index | plus: 1 %}
-
+                
                         <div class="nav-links">
+                            <!-- PREVIOUS BUTTON -->
                             {% if prev_index >= 0 %}
                             <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn">
                                 <span class="nav-label">{{ site.ui.prev_label | default: "Previous" }}</span>
@@ -257,7 +263,8 @@
                             {% else %}
                             <div class="nav-spacer"></div>
                             {% endif %}
-
+                
+                            <!-- NEXT BUTTON -->
                             {% if next_index < nav_items.size %}
                             <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn">
                                 <span class="nav-label">{{ site.ui.next_label | default: "Next" }}</span>
