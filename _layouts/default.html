@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} | Lumesca</title>
+    <style>
+        :root {
+            --bg-color: #fafafa;
+            --sidebar-bg: #f3f4f6;
+            --text-color: #111827;
+            --accent-color: #2563eb;
+            --border-color: #e5e7eb;
+            --font-main: 'Inter', -apple-system, sans-serif;
+            --font-read: 'Georgia', serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --sidebar-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --accent-color: #60a5fa;
+            --border-color: #334155;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            display: flex;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav {
+            width: 260px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .menu-section { margin-bottom: 2rem; }
+        .menu-label { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            opacity: 0.6; 
+            margin-bottom: 0.5rem;
+        }
+        .menu-list { list-style: none; padding: 0; margin: 0; }
+        .menu-list a { 
+            text-decoration: none; 
+            color: var(--text-color); 
+            display: block; 
+            padding: 0.4rem 0; 
+            font-size: 0.95rem;
+        }
+        .menu-list a:hover { color: var(--accent-color); }
+
+        main {
+            margin-left: 260px;
+            padding: 4rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        article {
+            font-family: var(--font-read);
+            font-size: 1.2rem;
+            line-height: 1.75;
+        }
+
+        .controls {
+            position: fixed;
+            top: 1rem;
+            right: 2rem;
+        }
+        #theme-btn {
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body id="body-tag">
+    <div class="controls">
+        <button id="theme-btn">Toggle Mode</button>
+    </div>
+
+    <nav>
+        <h2 style="font-size: 1.2rem; margin-bottom: 2rem;">Lumesca</h2>
+        
+        <!-- Automated Menu from navigation.yml -->
+        {% for section in site.data.navigation.main_menu %}
+        <div class="menu-section">
+            <div class="menu-label">{{ section.title }}</div>
+            <ul class="menu-list">
+                {% for item in section.sub_items %}
+                <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </nav>
+
+    <main>
+        <article>
+            {{ content }}
+        </article>
+    </main>
+
+    <script>
+        const btn = document.getElementById('theme-btn');
+        const body = document.getElementById('body-tag');
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
+
+        const theme = getCookie("theme") || "light";
+        body.setAttribute('data-theme', theme);
+
+        btn.addEventListener('click', () => {
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+            setCookie("theme", next, 365);
+        });
+    </script>
+</body>
+</html>
