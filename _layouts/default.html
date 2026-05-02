@@ -6,6 +6,7 @@
     <title>{{ page.title }} | Lumesca</title>
     <style>
         :root {
+            /* Light Mode Variables */
             --bg-color: #fafafa;
             --sidebar-bg: #f3f4f6;
             --text-color: #111827;
@@ -16,6 +17,7 @@
         }
 
         [data-theme="dark"] {
+            /* Dark Mode Variables */
             --bg-color: #0f172a;
             --sidebar-bg: #1e293b;
             --text-color: #f1f5f9;
@@ -32,6 +34,7 @@
             transition: background 0.3s, color 0.3s;
         }
 
+        /* Sidebar styling */
         nav {
             width: 260px;
             height: 100vh;
@@ -60,6 +63,7 @@
         }
         .menu-list a:hover { color: var(--accent-color); }
 
+        /* Main reader content styling */
         main {
             margin-left: 260px;
             padding: 4rem;
@@ -77,6 +81,7 @@
             position: fixed;
             top: 1rem;
             right: 2rem;
+            z-index: 100;
         }
         #theme-btn {
             background: var(--sidebar-bg);
@@ -96,7 +101,7 @@
     <nav>
         <h2 style="font-size: 1.2rem; margin-bottom: 2rem;">Lumesca</h2>
         
-        <!-- Automated Menu from navigation.yml -->
+        <!-- Automated loop through navigation.yml -->
         {% for section in site.data.navigation.main_menu %}
         <div class="menu-section">
             <div class="menu-label">{{ section.title }}</div>
@@ -111,6 +116,7 @@
 
     <main>
         <article>
+            <!-- Content from Markdown files is injected here -->
             {{ content }}
         </article>
     </main>
@@ -119,6 +125,7 @@
         const btn = document.getElementById('theme-btn');
         const body = document.getElementById('body-tag');
 
+        // Cookie Management
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
             d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -137,9 +144,11 @@
             return "";
         }
 
+        // Apply theme on load
         const theme = getCookie("theme") || "light";
         body.setAttribute('data-theme', theme);
 
+        // Toggle and save preference
         btn.addEventListener('click', () => {
             const current = body.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
