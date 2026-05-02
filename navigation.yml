@@ -1,5 +1,4 @@
-# _data/navigation.yml
-# This file controls the site-wide navigation menu.
+---
 main_menu:
   - title: "Project"
     sub_items:
@@ -11,5 +10,4 @@ main_menu:
     sub_items:
       - title: "Markdown Guide"
         url: "/docs/markdown"
-      - title: "Configuration"
-        url: "/docs/config"
+---
