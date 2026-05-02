@@ -1,5 +1,14 @@
-title: Lumesca Reader
-description: High-readability Markdown template
+# Site Identity
+title: Gitslate
+author: Your Name
+description: A clean, slate-like reading experience.
+
+# UI Labels (Configurable without touching HTML)
+ui:
+  theme_button: "Switch Mode"
+  menu_header: "Gitslate"
+  default_section_label: "Links"
+
+# Jekyll Settings
 remote_theme: jekyll/minima
-# Ensure Jekyll picks up data from root files
 data_source: .
