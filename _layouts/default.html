@@ -93,12 +93,16 @@
             max-width: 800px;
             margin: 0 auto;
             box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         article {
             font-family: var(--font-read);
             font-size: 1.2rem;
             line-height: 1.8;
+            flex-grow: 1;
         }
 
         .menu-section { margin-bottom: 2rem; }
@@ -171,15 +175,10 @@
             text-overflow: ellipsis;
         }
 
-        .nav-arrow {
-            font-size: 1.2rem;
-            opacity: 0.7;
-        }
-
+        .nav-arrow { font-size: 1.2rem; opacity: 0.7; }
         .nav-btn-prev .nav-arrow { margin-right: 1rem; }
         .nav-btn-next .nav-arrow { margin-left: 1rem; }
         .nav-btn-next { justify-content: flex-end; text-align: right; }
-
         .nav-spacer { width: 48%; }
 
         @media (max-width: 600px) {
@@ -261,11 +260,10 @@
 
                 {% for item in nav_items %}
                     {% comment %} 
-                      Stricter URL matching: Ensure both are treated as relative paths 
-                      without double slashes or missing leads.
+                        Bulletproof normalization: stripping indices and double slashes.
                     {% endcomment %}
-                    {% assign item_match = item.url | relative_url | replace: "//", "/" %}
-                    {% assign current_match = page.url | relative_url | replace: "//", "/" %}
+                    {% assign item_match = item.url | relative_url | replace: "//", "/" | replace: "/index.html", "/" | remove_first: "/" %}
+                    {% assign current_match = page.url | relative_url | replace: "//", "/" | replace: "/index.html", "/" | remove_first: "/" %}
                 
                     {% if item_match == current_match %}
                         {% assign curr_index = forloop.index0 %}
@@ -273,7 +271,6 @@
                         {% assign next_index = curr_index | plus: 1 %}
                 
                         <div class="nav-links">
-                            <!-- PREVIOUS BUTTON -->
                             {% if prev_index >= 0 %}
                             <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn nav-btn-prev">
                                 <span class="nav-arrow">←</span>
@@ -286,7 +283,6 @@
                             <div class="nav-spacer"></div>
                             {% endif %}
                 
-                            <!-- NEXT BUTTON -->
                             {% if next_index < nav_items.size %}
                             <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn nav-btn-next">
                                 <div class="nav-content">
