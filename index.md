@@ -3,36 +3,48 @@ layout: default
 title: Welcome to Gitslate
 ---
 
-# Gitslate: Narrative Reading for GitHub
+# Gitslate: A Pure Publishing Slate for GitHub
 
-**Gitslate** is a minimalist, high-readability template designed to transform standard GitHub Markdown files into a polished, book-like reading experience. By leveraging GitHub’s native Jekyll engine, it bridges the gap between raw documentation and an immersive digital publication.
+**Gitslate** is born from the idea that GitHub isn't just for code—it's one of the world's most stable platforms for the written word. This template transforms your repository into a clean, professional publication space, perfect for documentation, digital books, research notes, or any text-heavy project that deserves a focused reading environment.
+
+---
+
+## The Concept
+
+The core philosophy of Gitslate is **Text First**. It removes the "developer noise" of a standard repository view and presents your content in a layout optimized for human eyes, not compilers.
+
+### Use Cases
+*   **Project Documentation**: Create clear, accessible manuals for tools, hobbies, or community projects.
+*   **Digital Publishing**: Self-publish essays, books, or articles directly from your writing desk.
+*   **Knowledge Bases**: Organize research or personal wikis into a structured, readable format.
+*   **Open Manifestos**: Share ideas and structured text with the world in a stable, version-controlled environment.
 
 ---
 
 ## How It Works
 
-Gitslate operates as a "silent engine" behind your repository. It doesn't interfere with your writing workflow; it simply wraps your content in a professional interface.
+Gitslate operates as an invisible layer over your Markdown files.
 
-### 1. The Content Layer
-Your stories, documentation, or notes stay exactly where they are—as standard `.md` files in your main folder or subdirectories. Gitslate uses the **Front Matter** (the block between the `---` lines at the top of this file) to identify which pages should be rendered using the reader template[cite: 1].
+### 1. Minimalist Writing Workflow
+You write in standard Markdown. Whether your files are in the main folder or organized into subfolders, Gitslate finds them. By adding a small instruction at the top of your file (the Front Matter), you tell the system to wrap your text in the Gitslate reader template[cite: 1].
 
-### 2. The Configuration Hub
-The entire project identity is managed through a single file: `_config.yml`. Here, you can change the project name, the author, and even the text on the UI buttons without ever touching a line of HTML or CSS[cite: 1].
+### 2. Centralized Identity
+You don't need to be a web designer to brand your site. Every name, title, and button label is controlled through the `_config.yml` file. If you want to rename your project or change the author's name, you do it in one place, and the site updates everywhere[cite: 1].
 
-### 3. Automated Navigation
-The sidebar menu is controlled by `navigation.yml` located in your root folder. This file allows you to structure your content into sections and links. Whenever you add a new chapter or page, you simply update the YAML list, and the menu updates globally across the entire site[cite: 2].
+### 3. Effortless Navigation
+A semi-automated menu lives in your root folder as `navigation.yml`. You define the chapters or sections there, and the template builds the sidebar for you. It handles links to files in the main folder and subdirectories automatically, ensuring your readers never get lost[cite: 1, 2].
 
-### 4. Interactive Reading Experience
-Gitslate is optimized for long-form reading:
-*   **Dual-Font System**: A clean sans-serif for the interface keeps the navigation sharp, while a classic serif font for the main text reduces eye strain during long sessions[cite: 1].
-*   **Dark Mode Persistence**: A floating toggle allows you to switch between light and dark modes. Your preference is saved via a cookie, so the site remembers your choice the next time you visit[cite: 1].
+### 4. Reading Comfort
+Gitslate is built for long-form consumption:
+*   **Typography**: We use a dual-font system. A modern sans-serif keeps the interface sharp, while a classic serif font is used for the main body to provide the familiar comfort of a printed book[cite: 1].
+*   **Dark Mode**: For those who read late into the night, a high-contrast dark mode is available at the click of a button. The site uses a cookie to remember your preference, so you don't have to toggle it every time you return[cite: 1].
 
 ---
 
-## Getting Started
+## Ready to Publish?
 
-To publish your own "Slate," simply ensure your repository has the `_layouts` folder and the `_config.yml` and `navigation.yml` files in place. Once GitHub Pages is enabled in your repository settings, your Markdown files will be live at your custom GitHub URL.
+Gitslate is designed to be free and open. Once you've placed the `_layouts`, `_config.yml`, and `navigation.yml` in your repo, your words are ready for the world.
 
-> "Gitslate: Where your code's story finally gets the layout it deserves."
+> "Gitslate: Turning repositories into readers."
 
 ---
