@@ -13,6 +13,7 @@
             --border-color: #e5e7eb;
             --font-main: 'Inter', -apple-system, sans-serif;
             --font-read: 'Georgia', serif;
+            --sidebar-width: 280px;
         }
 
         [data-theme="dark"] {
@@ -28,20 +29,78 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-main);
-            display: flex;
             transition: background 0.3s, color 0.3s;
+            display: block;
+        }
+
+        /* --- MOBILE FIRST NAVIGATION --- */
+        
+        /* Mobile Overlay Background */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 90;
         }
 
         nav {
-            width: 260px;
+            position: fixed;
+            top: 0;
+            left: calc(-1 * var(--sidebar-width)); /* Hidden by default */
+            width: var(--sidebar-width);
             height: 100vh;
             background: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
-            position: fixed;
             padding: 2rem 1.5rem;
             overflow-y: auto;
+            z-index: 100;
+            transition: left 0.3s ease;
         }
 
+        /* State when menu is open on mobile */
+        body.nav-open nav { left: 0; }
+        body.nav-open .nav-overlay { display: block; }
+
+        /* Mobile Header */
+        header.mobile-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 80;
+        }
+
+        .burger-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- DESKTOP ADAPTATION --- */
+        @media (min-width: 1024px) {
+            header.mobile-bar { display: none; }
+            .nav-overlay { display: none !important; }
+            
+            nav {
+                left: 0; /* Always visible */
+            }
+
+            main {
+                margin-left: var(--sidebar-width);
+                padding: 4rem;
+            }
+            
+            .controls { top: 2rem; right: 4rem; }
+        }
+
+        /* --- CONTENT & UI --- */
         .menu-section { margin-bottom: 2rem; }
         .menu-label { 
             font-size: 0.75rem; 
@@ -55,54 +114,58 @@
             text-decoration: none; 
             color: var(--text-color); 
             display: block; 
-            padding: 0.4rem 0; 
-            font-size: 0.95rem;
+            padding: 0.5rem 0; 
         }
-        .menu-list a:hover { color: var(--accent-color); }
 
         main {
-            margin-left: 260px;
-            padding: 4rem;
-            max-width: 800px;
-            width: 100%;
+            padding: 2rem 1rem;
+            max-width: 850px;
+            margin: 0 auto;
         }
 
         article {
             font-family: var(--font-read);
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             line-height: 1.75;
         }
 
         .controls {
             position: fixed;
-            top: 1rem;
-            right: 2rem;
-            z-index: 100;
+            top: 0.75rem;
+            right: 1rem;
+            z-index: 110;
         }
         #theme-btn {
-            background: var(--sidebar-bg);
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 500;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body id="body-tag">
+
+    <!-- Mobile Top Bar -->
+    <header class="mobile-bar">
+        <button class="burger-btn" id="burger-open">☰</button>
+        <span style="font-weight: bold;">{{ site.title }}</span>
+        <div style="width: 1.5rem;"></div> <!-- spacer -->
+    </header>
+
+    <div class="nav-overlay" id="nav-overlay"></div>
+
     <div class="controls">
-        <!-- Pulls button text from _config.yml -->
-        <button id="theme-btn">{{ site.ui.theme_button | default: "Toggle Mode" }}</button>
+        <button id="theme-btn">{{ site.ui.theme_button | default: "Mode" }}</button>
     </div>
 
     <nav>
-        <!-- Pulls brand name from _config.yml -->
         <h2 style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 700;">
             {{ site.ui.menu_header | default: site.title }}
         </h2>
         
-        <!-- Automated loop through navigation.yml -->
         {% for section in site.data.navigation.main_menu %}
         <div class="menu-section">
             <div class="menu-label">{{ section.title }}</div>
@@ -122,33 +185,37 @@
     </main>
 
     <script>
-        const btn = document.getElementById('theme-btn');
         const body = document.getElementById('body-tag');
+        const themeBtn = document.getElementById('theme-btn');
+        const burgerBtn = document.getElementById('burger-open');
+        const overlay = document.getElementById('nav-overlay');
 
+        /* Mobile Menu Logic */
+        burgerBtn.addEventListener('click', () => body.classList.toggle('nav-open'));
+        overlay.addEventListener('click', () => body.classList.remove('nav-open'));
+
+        /* Cookie Theme Logic */
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
             d.setTime(d.getTime() + (exdays*24*60*60*1000));
-            let expires = "expires="+ d.toUTCString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            document.cookie = cname + "=" + cvalue + ";expires="+ d.toUTCString() + ";path=/";
         }
 
         function getCookie(cname) {
             let name = cname + "=";
             let ca = document.cookie.split(';');
             for(let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1);
+                let c = ca[i].trim();
                 if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
             }
             return "";
         }
 
-        const theme = getCookie("theme") || "light";
-        body.setAttribute('data-theme', theme);
+        const currentTheme = getCookie("theme") || "light";
+        body.setAttribute('data-theme', currentTheme);
 
-        btn.addEventListener('click', () => {
-            const current = body.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
+        themeBtn.addEventListener('click', () => {
+            const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', next);
             setCookie("theme", next, 365);
         });
