@@ -118,7 +118,7 @@
         }
         .menu-list a:hover { color: var(--accent-color); }
 
-        /* --- FOOTER & NAV BUTTONS --- */
+        /* --- REFINED NAV BUTTONS --- */
         .slate-footer {
             margin-top: 5rem;
             padding-bottom: 3rem;
@@ -127,19 +127,19 @@
         .chapter-nav .nav-links {
             display: flex;
             justify-content: space-between;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-top: 2rem;
         }
 
         .nav-btn {
             text-decoration: none;
             color: var(--text-color);
-            padding: 1.25rem;
+            padding: 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 8px;
             width: 48%;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             transition: all 0.2s ease;
             background: var(--sidebar-bg);
             box-sizing: border-box;
@@ -147,19 +147,39 @@
 
         .nav-btn:hover {
             border-color: var(--accent-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background: var(--bg-color);
+        }
+
+        .nav-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .nav-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             opacity: 0.5;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
         }
 
-        .nav-title { font-weight: 600; font-size: 1.1rem; line-height: 1.3; }
+        .nav-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-arrow {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .nav-btn-prev .nav-arrow { margin-right: 1rem; }
+        .nav-btn-next .nav-arrow { margin-left: 1rem; }
+        .nav-btn-next { justify-content: flex-end; text-align: right; }
+
         .nav-spacer { width: 48%; }
 
         @media (max-width: 600px) {
@@ -232,7 +252,6 @@
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem;">
             
             <div class="chapter-nav">
-                <!-- Flatten navigation logic -->
                 {% assign nav_items = "" | split: "," %}
                 {% for section in site.data.navigation.main_menu %}
                     {% for item in section.sub_items %}
@@ -242,13 +261,13 @@
 
                 {% for item in nav_items %}
                     {% comment %} 
-                      Normalize URLs to ensure comparison works even if 
-                      one has a leading/trailing slash and the other doesn't.
+                      Stricter URL matching: Ensure both are treated as relative paths 
+                      without double slashes or missing leads.
                     {% endcomment %}
-                    {% assign item_url = item.url | relative_url | append: "/" | replace: "//", "/" %}
-                    {% assign current_url = page.url | relative_url | append: "/" | replace: "//", "/" %}
+                    {% assign item_match = item.url | relative_url | replace: "//", "/" %}
+                    {% assign current_match = page.url | relative_url | replace: "//", "/" %}
                 
-                    {% if item_url == current_url %}
+                    {% if item_match == current_match %}
                         {% assign curr_index = forloop.index0 %}
                         {% assign prev_index = curr_index | minus: 1 %}
                         {% assign next_index = curr_index | plus: 1 %}
@@ -256,9 +275,12 @@
                         <div class="nav-links">
                             <!-- PREVIOUS BUTTON -->
                             {% if prev_index >= 0 %}
-                            <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn">
-                                <span class="nav-label">{{ site.ui.prev_label | default: "Previous" }}</span>
-                                <span class="nav-title">{{ nav_items[prev_index].title }}</span>
+                            <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn nav-btn-prev">
+                                <span class="nav-arrow">←</span>
+                                <div class="nav-content">
+                                    <span class="nav-label">{{ site.ui.prev_label | default: "Previous" }}</span>
+                                    <span class="nav-title">{{ nav_items[prev_index].title }}</span>
+                                </div>
                             </a>
                             {% else %}
                             <div class="nav-spacer"></div>
@@ -266,9 +288,12 @@
                 
                             <!-- NEXT BUTTON -->
                             {% if next_index < nav_items.size %}
-                            <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn">
-                                <span class="nav-label">{{ site.ui.next_label | default: "Next" }}</span>
-                                <span class="nav-title">{{ nav_items[next_index].title }}</span>
+                            <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn nav-btn-next">
+                                <div class="nav-content">
+                                    <span class="nav-label">{{ site.ui.next_label | default: "Next" }}</span>
+                                    <span class="nav-title">{{ nav_items[next_index].title }}</span>
+                                </div>
+                                <span class="nav-arrow">→</span>
                             </a>
                             {% else %}
                             <div class="nav-spacer"></div>
