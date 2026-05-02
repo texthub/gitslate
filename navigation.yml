@@ -1,13 +1,10 @@
 ---
+# Edit only this file to update the sidebar links
 main_menu:
-  - title: "Project"
+  - title: "Library"
     sub_items:
-      - title: "Overview"
+      - title: "Home Page"
         url: "/"
-      - title: "Installation"
-        url: "/docs/install"
-  - title: "Documentation"
-    sub_items:
-      - title: "Markdown Guide"
-        url: "/docs/markdown"
+      - title: "Getting Started"
+        url: "/docs/setup"
 ---
