@@ -1,3 +1,7 @@
-# Main Index File
+---
+layout: default
+title: Home
+---
 
-This is a Test Main-Index File. This is the Main Page of the Content. 
+# Lumesca Project
+Welcome to your high-readability GitHub Pages site. The menu on the left is controlled entirely by the `navigation.yml` file in this folder.
