@@ -1,7 +1,7 @@
 ---
 layout: default
 menu_title: "Setup Gitslate"
-title: "Setuo Gitslate"
+title: "Setup Gitslate"
 nav_order: 30
 date: 2026-05-05
 ---
