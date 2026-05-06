@@ -1,6 +1,6 @@
 ---
 layout: default
-menu_title: "Setup-Gitslate"
+menu_title: "Setup"
 nav_order: 30
 date: 2026-05-05
 ---
