@@ -7,20 +7,18 @@
     <style>
         :root {
             --bg-color: #fafafa;
-            --sidebar-bg: #f3f4f6;
+            --sidebar-bg: #1e293b; /* Dunklerer Kontrast für die Sidebar */
             --text-color: #111827;
-            --accent-color: #2563eb;
+            --nav-text: #f1f5f9;
+            --accent-color: #3b82f6;
             --border-color: #e5e7eb;
-            --font-main: 'Inter', -apple-system, sans-serif;
-            --font-read: 'Georgia', serif;
             --sidebar-width: 280px;
         }
 
         [data-theme="dark"] {
             --bg-color: #0f172a;
-            --sidebar-bg: #1e293b;
+            --sidebar-bg: #0f172a;
             --text-color: #f1f5f9;
-            --accent-color: #60a5fa;
             --border-color: #334155;
         }
 
@@ -28,171 +26,131 @@
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: var(--font-main);
-            transition: background 0.3s, color 0.3s;
+            font-family: 'Inter', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* --- MOBILE HEADER --- */
+        /* --- HEADER & NAVIGATION --- */
         .mobile-header {
-            display: none;
+            display: flex;
             align-items: center;
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             background: var(--sidebar-bg);
-            border-bottom: 1px solid var(--border-color);
+            color: white;
             position: sticky;
             top: 0;
             z-index: 1000;
-        }
-
-        @media (max-width: 1023px) {
-            .mobile-header { display: flex; }
+            height: 60px;
+            box-sizing: border-box;
         }
 
         .burger-btn {
             background: none;
             border: none;
-            font-size: 1.5rem;
-            color: var(--text-color);
+            font-size: 1.8rem;
+            color: white;
             cursor: pointer;
             margin-right: 1rem;
+            display: flex;
+            align-items: center;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
         nav {
             position: fixed;
-            top: 0;
+            top: 0; /* Deckt den Header im mobilen Modus ab für saubere Optik */
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
+            color: var(--nav-text);
             padding: 2rem 1.5rem;
+            box-sizing: border-box;
             overflow-y: auto;
-            z-index: 500;
+            z-index: 2000;
             transition: transform 0.3s ease;
-        }
-
-        @media (max-width: 1023px) {
-            nav { transform: translateX(-100%); }
-            body.nav-active nav { transform: translateX(0); }
+            transform: translateX(-100%);
         }
 
         .nav-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: none;
-            z-index: 400;
+            z-index: 1500;
         }
 
+        body.nav-active nav { transform: translateX(0); }
         body.nav-active .nav-overlay { display: block; }
 
-        .menu-list { list-style: none; padding: 0; margin: 0; }
-        .menu-item { margin-bottom: 0.5rem; }
-        .menu-link {
-            text-decoration: none;
-            color: var(--text-color);
-            display: block;
-            padding: 0.4rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            transition: background 0.2s;
-        }
-        .menu-link:hover { background: var(--border-color); }
-        .menu-link.active { 
-            color: var(--accent-color); 
-            font-weight: 600; 
-            background: rgba(37, 99, 235, 0.1); 
+        @media (min-width: 1024px) {
+            .mobile-header, .nav-overlay { display: none !important; }
+            nav { transform: translateX(0); z-index: 100; top: 0; }
+            main { margin-left: var(--sidebar-width); }
         }
 
-        /* Nested Levels */
+        /* --- MENU LOGIC --- */
+        .menu-list { list-style: none; padding: 0; margin: 0; }
+        .menu-link {
+            text-decoration: none;
+            color: var(--nav-text);
+            display: block;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            opacity: 0.8;
+            transition: all 0.2s;
+        }
+        .menu-link:hover, .menu-link.active {
+            opacity: 1;
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+        }
         .nested-group {
             margin-left: 1rem;
             padding-left: 0.5rem;
-            border-left: 1px solid var(--border-color);
-            margin-top: 0.2rem;
+            border-left: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- CONTENT --- */
+        /* --- CONTENT AREA --- */
         main {
-            margin-left: var(--sidebar-width);
-            padding: 3rem 2rem;
+            padding: 2rem;
             flex-grow: 1;
-            max-width: 1000px;
         }
-
-        @media (max-width: 1023px) {
-            main { margin-left: 0; padding: 2rem 1rem; }
-        }
-
         article {
-            font-family: var(--font-read);
-            font-size: 1.2rem;
-            line-height: 1.8;
-            max-width: 700px;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
 
-        /* --- FOOTER NAVIGATION --- */
-        .page-footer {
-            margin-top: 5rem;
-            padding-top: 2rem;
+        /* --- FOOTER NAV --- */
+        .footer-nav {
+            margin-top: 4rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
             border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
         }
-
-        .nav-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .nav-card {
+        .nav-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             text-decoration: none;
             color: var(--text-color);
-            padding: 1.2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.2s;
-            background: var(--sidebar-bg);
+            background: var(--bg-color);
         }
-
-        .nav-card:hover { border-color: var(--accent-color); transform: translateY(-2px); }
-        .nav-card.next { text-align: right; align-items: flex-end; }
-        .nav-card .label { font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; margin-bottom: 0.4rem; }
-        .nav-card .title { font-weight: 700; font-size: 1rem; }
-
-        @media (max-width: 600px) {
-            .nav-buttons { grid-template-columns: 1fr; }
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 1.2rem;
-            right: 1.2rem;
-            z-index: 1100;
-        }
-
-        #theme-btn {
-            background: var(--sidebar-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+        .nav-btn:hover { border-color: var(--accent-color); }
+        .nav-btn.next { text-align: right; }
+        .btn-label { display: block; font-size: 0.7rem; opacity: 0.5; text-transform: uppercase; }
+        .btn-title { font-weight: bold; }
     </style>
 </head>
 <body id="body-tag">
 
-    {% comment %} 
-        MASTER-LISTE DER SEITEN (Single Source of Truth)
-        Wir filtern alle Seiten, die eine nav_order haben und sortieren sie.
-    {% endcomment %}
+    {% comment %} Normalisierung der Seitenliste {% endcomment %}
     {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
 
     <header class="mobile-header">
@@ -202,29 +160,31 @@
 
     <div class="nav-overlay" id="nav-overlay"></div>
 
-    <div class="theme-toggle">
-        <button id="theme-btn">Modus</button>
-    </div>
-
     <nav>
-        <h2 style="margin-bottom: 2rem; font-size: 1.4rem;">{{ site.title }}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <span style="font-size: 1.4rem; font-weight: bold;">{{ site.title }}</span>
+            {% comment %} Schließen-Button nur Mobil {% endcomment %}
+            <button class="burger-btn" onclick="document.getElementById('body-tag').classList.remove('nav-active')" style="margin:0; font-size: 1.2rem;">✕</button>
+        </div>
+        
         <ul class="menu-list">
             {% for p in all_pages %}
-                {% comment %} Wir prüfen, ob die Seite eine Top-Level Seite ist (kein Unterverzeichnis oder Index) {% endcomment %}
-                {% assign path_array = p.url | split: "/" %}
-                {% if path_array.size <= 2 %}
-                    <li class="menu-item">
+                {% comment %} Wir erkennen Top-Level an der Pfad-Tiefe oder wenn es eine index-Datei ist {% endcomment %}
+                {% assign parts = p.url | split: "/" %}
+                {% if parts.size <= 2 or p.url contains "index" %}
+                    {% comment %} Prüfen, ob dies wirklich die 'Eltern-Seite' für diesen Pfad ist {% endcomment %}
+                    <li style="margin-bottom: 0.5rem;">
                         <a href="{{ p.url | relative_url }}" class="menu-link {% if page.url == p.url %}active{% endif %}">
                             {{ p.title }}
                         </a>
                         
-                        {% comment %} Suche nach Kindern: Alles, was im Pfad dieser Seite liegt {% endcomment %}
-                        {% assign folder_path = p.url | replace: "index.html", "" %}
-                        {% if folder_path != "/" %}
+                        {% comment %} Unterseiten suchen: Alles im gleichen Verzeichnis {% endcomment %}
+                        {% assign folder = p.url | replace: "index.html", "" | replace: ".html", "" %}
+                        {% if folder != "/" %}
                             <div class="nested-group">
                                 {% for child in all_pages %}
-                                    {% if child.url contains folder_path and child.url != p.url %}
-                                        <a href="{{ child.url | relative_url }}" class="menu-link {% if page.url == child.url %}active{% endif %}" style="font-size: 0.85rem;">
+                                    {% if child.url contains folder and child.url != p.url %}
+                                        <a href="{{ child.url | relative_url }}" class="menu-link {% if page.url == child.url %}active{% endif %}" style="font-size: 0.9rem;">
                                             {{ child.title }}
                                         </a>
                                     {% endif %}
@@ -239,66 +199,47 @@
 
     <main>
         <article>
-            <h1>{{ page.title }}</h1>
             {{ content }}
-        </article>
-
-        <footer class="page-footer">
-            <div class="nav-buttons">
-                {% comment %} Logik für Previous / Next basierend auf der sortierten Liste {% endcomment %}
+            
+            <div class="footer-nav">
+                {% comment %} Fix für den Previous/Next Button: Exakter URL-Vergleich {% endcomment %}
                 {% for item in all_pages %}
-                    {% if item.url == page.url %}
+                    {% assign item_url = item.url | replace: "index.html", "" %}
+                    {% assign current_url = page.url | replace: "index.html", "" %}
+                    
+                    {% if item_url == current_url %}
                         {% assign curr_idx = forloop.index0 %}
                         {% assign prev_idx = curr_idx | minus: 1 %}
                         {% assign next_idx = curr_idx | plus: 1 %}
 
                         {% if prev_idx >= 0 %}
-                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-card">
-                                <span class="label">Zurück</span>
-                                <span class="title">{{ all_pages[prev_idx].title }}</span>
+                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-btn">
+                                <span class="btn-label">Zurück</span>
+                                <span class="btn-title">{{ all_pages[prev_idx].title }}</span>
                             </a>
                         {% else %}
-                            <div></div>
+                            <div style="flex:1"></div>
                         {% endif %}
 
                         {% if next_idx < all_pages.size %}
-                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-card next">
-                                <span class="label">Weiter</span>
-                                <span class="title">{{ all_pages[next_idx].title }}</span>
+                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-btn next">
+                                <span class="btn-label">Weiter</span>
+                                <span class="btn-title">{{ all_pages[next_idx].title }}</span>
                             </a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
-            <p style="text-align: center; opacity: 0.3; font-size: 0.8rem; margin-top: 4rem;">
-                &copy; {{ site.time | date: "%Y" }} {{ site.author }}
-            </p>
-        </footer>
+        </article>
     </main>
 
     <script>
         const body = document.getElementById('body-tag');
-        const themeBtn = document.getElementById('theme-btn');
-        const burgerBtn = document.getElementById('burger-toggle');
+        const burger = document.getElementById('burger-toggle');
         const overlay = document.getElementById('nav-overlay');
 
-        // Sidebar Toggle
-        burgerBtn.addEventListener('click', () => body.classList.toggle('nav-active'));
+        burger.addEventListener('click', () => body.classList.add('nav-active'));
         overlay.addEventListener('click', () => body.classList.remove('nav-active'));
-
-        // Theme Switcher (LocalStorage für Beständigkeit)
-        const setTheme = (theme) => {
-            body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        };
-
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(savedTheme);
-
-        themeBtn.addEventListener('click', () => {
-            const current = body.getAttribute('data-theme');
-            setTheme(current === 'dark' ? 'light' : 'dark');
-        });
     </script>
 </body>
 </html>
