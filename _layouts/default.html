@@ -15,7 +15,7 @@
             --border-color: #e2e8f0;
             --btn-bg: #f8fafc;
             --sidebar-width: 260px;
-            --border-width-thick: 2px;
+            --border-thick: 2px;
         }
 
         [data-theme="dark"] {
@@ -30,33 +30,76 @@
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             display: flex;
+            flex-direction: column;
             transition: background 0.2s;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- MOBILE HEADER --- */
+        .mobile-header {
+            display: flex;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 0 1.2rem;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 2000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .burger-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* --- SIDEBAR --- */
         nav {
             position: fixed;
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--sidebar-bg);
             color: var(--nav-text);
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             box-sizing: border-box;
             overflow-y: auto;
+            z-index: 3000;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
             border-right: 1px solid var(--border-color);
-            z-index: 1000;
         }
 
+        .nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 2500;
+            display: none;
+        }
+
+        body.nav-active nav { transform: translateX(0); }
+        body.nav-active .nav-overlay { display: block; }
+
+        @media (min-width: 1024px) {
+            .mobile-header, .nav-overlay { display: none !important; }
+            nav { transform: translateX(0); z-index: 1000; }
+            main { margin-left: var(--sidebar-width); }
+        }
+
+        /* --- MENU STYLE --- */
         .menu-brand {
             color: #ffffff;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: block;
         }
 
         .menu-list { list-style: none; padding: 0; margin: 0; }
@@ -64,97 +107,88 @@
             text-decoration: none;
             color: inherit;
             display: block;
-            padding: 0.4rem 0.75rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 4px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             margin-bottom: 2px;
         }
         .menu-link:hover { color: var(--nav-active); background: rgba(255,255,255,0.05); }
         .menu-link.active { color: var(--nav-active); background: var(--accent-color); font-weight: 600; }
 
-        .dir-divider {
-            font-size: 0.65rem;
+        .dir-label {
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin: 1.5rem 0 0.5rem 0.75rem;
+            margin: 1.8rem 0 0.6rem 0.8rem;
             color: #475569;
             font-weight: bold;
         }
 
-        /* --- THEME TOGGLE (SILHOUETTE) --- */
-        #theme-toggle {
-            cursor: pointer;
+        /* --- THEME TOGGLE (Simplified Silhouette) --- */
+        .theme-toggle-btn {
             background: none;
             border: none;
-            font-size: 1.2rem;
-            filter: grayscale(1) brightness(2) contrast(10);
+            cursor: pointer;
+            font-size: 1.3rem;
+            filter: grayscale(1) brightness(3) contrast(5);
             padding: 0;
-            color: white;
-            opacity: 0.7;
+            display: flex;
+            align-items: center;
         }
 
-        /* --- MAIN CONTENT AREA --- */
+        /* --- CONTENT AREA --- */
         main {
             flex-grow: 1;
-            margin-left: var(--sidebar-width);
-            padding: 4rem 2rem;
+            padding: 6rem 2rem 2rem 2rem; /* Top padding for mobile header */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        @media (min-width: 1024px) {
+            main { padding: 4rem 2rem; }
+        }
+
         article { width: 100%; max-width: 750px; flex-grow: 1; }
-        
-        .entry-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            color: var(--text-color);
-            letter-spacing: -0.03em;
-        }
+        .entry-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.03em; }
 
-        /* --- FOOTER & NAVIGATION BUTTONS --- */
-        .site-footer {
-            margin-top: 6rem;
-            width: 100%;
-            max-width: 750px;
-        }
-
-        .page-nav {
+        /* --- RECTANGULAR NAVIGATION BUTTONS --- */
+        .page-navigation {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-            margin-bottom: 4rem;
+            gap: 1.5rem;
+            margin: 5rem 0 3rem 0;
         }
 
-        .nav-btn {
+        .nav-card {
             display: flex;
             align-items: center;
-            padding: 1rem;
-            border: var(--border-width-thick) solid var(--border-color);
-            border-radius: 4px; /* Slightly rounded, more technical look */
+            padding: 1.2rem;
+            border: var(--border-thick) solid var(--border-color);
+            border-radius: 4px;
             text-decoration: none;
             color: var(--text-color);
-            font-size: 0.85rem;
-            font-weight: 600;
             background: var(--btn-bg);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease-in-out;
         }
 
-        /* Hover Animation: Lift and Color Change */
-        .nav-btn:hover {
+        .nav-card:hover {
             border-color: var(--accent-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
             background: var(--bg-color);
         }
 
-        .nav-btn.next { justify-content: flex-end; text-align: right; }
-        .nav-arrow { font-size: 1.1rem; font-weight: 900; }
+        .nav-card.next { justify-content: flex-end; text-align: right; }
+        .nav-arrow { font-size: 1.2rem; font-weight: bold; }
 
-        .footer-meta {
+        /* --- FOOTER --- */
+        .site-footer {
+            width: 100%;
+            max-width: 750px;
             border-top: 1px solid var(--border-color);
             padding: 2rem 0 4rem 0;
             display: flex;
@@ -163,21 +197,28 @@
             color: #64748b;
         }
 
-        @media (max-width: 1024px) {
-            nav { display: none; }
-            main { margin-left: 0; padding: 2rem 1rem; }
+        @media (max-width: 600px) {
+            .page-navigation { grid-template-columns: 1fr; }
+            .site-footer { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
 <body id="body-tag">
 
-    {% comment %} Dynamic page gathering and sorting {% endcomment %}
     {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
 
-    <nav>
-        <div class="menu-brand">
-            <span>{{ site.title }}</span>
-            <button id="theme-toggle" onclick="toggleTheme()">💡</button>
+    <header class="mobile-header">
+        <button class="burger-btn" onclick="document.body.classList.add('nav-active')">☰</button>
+        <span style="font-weight: bold;">{{ site.title }}</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">💡</button>
+    </header>
+
+    <div class="nav-overlay" onclick="document.body.classList.remove('nav-active')"></div>
+
+    <nav id="sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+            <span class="menu-brand">{{ site.title }}</span>
+            <button class="theme-toggle-btn" onclick="toggleTheme()">💡</button>
         </div>
 
         <ul class="menu-list">
@@ -187,7 +228,7 @@
                 {% assign current_dir = parts[1] %}
                 
                 {% if current_dir != last_dir and current_dir != nil %}
-                    <li class="dir-divider">{{ current_dir | replace: "-", " " }}</li>
+                    <li class="dir-label">{{ current_dir | replace: "-", " " }}</li>
                     {% assign last_dir = current_dir %}
                 {% endif %}
                 
@@ -203,15 +244,11 @@
     <main>
         <article>
             <h1 class="entry-title">{{ page.title }}</h1>
-            
             <div class="content-body">
                 {{ content }}
             </div>
-        </article>
 
-        <footer class="site-footer">
-            <div class="page-nav">
-                {% comment %} Logic for Previous / Next based on nav_order sequence {% endcomment %}
+            <div class="page-navigation">
                 {% for item in all_pages %}
                     {% if item.url == page.url %}
                         {% assign idx = forloop.index0 %}
@@ -219,29 +256,29 @@
                         {% assign next_idx = idx | plus: 1 %}
 
                         {% if prev_idx >= 0 %}
-                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-btn">
+                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-card">
                                 <span class="nav-arrow">←</span>
-                                <span style="margin-left: 0.8rem;">{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
+                                <span style="margin-left: 1rem;">{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
                             </a>
                         {% else %}<div></div>{% endif %}
 
                         {% if next_idx < all_pages.size %}
-                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-btn next">
-                                <span style="margin-right: 0.8rem;">{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
+                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-card next">
+                                <span style="margin-right: 1rem;">{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
                                 <span class="nav-arrow">→</span>
                             </a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
+        </article>
 
-            <div class="footer-meta">
-                <div>
-                    <strong>Last Modified:</strong> {{ page.last_modified_at | date: "%Y-%m-%d" | default: page.date | date: "%Y-%m-%d" }}
-                </div>
-                <div>
-                    &copy; {{ site.time | date: "%Y" }} {{ site.author | default: site.title }}
-                </div>
+        <footer class="site-footer">
+            <div>
+                <strong>Last Modified:</strong> {{ page.last_modified_at | date: "%Y-%m-%d" | default: page.date | date: "%Y-%m-%d" }}
+            </div>
+            <div>
+                &copy; {{ site.time | date: "%Y" }} {{ site.author | default: site.title }}
             </div>
         </footer>
     </main>
@@ -253,7 +290,7 @@
             body.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
         }
-        // Initialize theme from storage
+        
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.getElementById('body-tag').setAttribute('data-theme', savedTheme);
     </script>
