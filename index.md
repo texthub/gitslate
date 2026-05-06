@@ -1,9 +1,8 @@
 ---
 layout: default
-title: Welcome to Gitslate
+title: "Gitslate: A Pure Publishing Slate for GitHub"
+nav_order: 1
 ---
-
-# Gitslate: A Pure Publishing Slate for GitHub
 
 **Gitslate** is born from the idea that GitHub isn't just for code—it's one of the world's most stable platforms for the written word. This template transforms your repository into a clean, professional publication space, perfect for documentation, digital books, research notes, or any text-heavy project that deserves a focused reading environment.
 
