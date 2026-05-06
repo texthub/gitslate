@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #fafafa;
-            --sidebar-bg: #1e293b; /* Dunklerer Kontrast für die Sidebar */
+            --sidebar-bg: #1e293b;
             --text-color: #111827;
             --nav-text: #f1f5f9;
             --accent-color: #3b82f6;
@@ -17,8 +17,9 @@
 
         [data-theme="dark"] {
             --bg-color: #0f172a;
-            --sidebar-bg: #0f172a;
+            --sidebar-bg: #1e293b;
             --text-color: #f1f5f9;
+            --nav-text: #f1f5f9;
             --border-color: #334155;
         }
 
@@ -26,40 +27,37 @@
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: background 0.3s, color 0.3s;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* --- HEADER & NAVIGATION --- */
+        /* --- NAVIGATION & HEADER --- */
         .mobile-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0.75rem 1rem;
             background: var(--sidebar-bg);
             color: white;
             position: sticky;
             top: 0;
             z-index: 1000;
-            height: 60px;
-            box-sizing: border-box;
         }
 
         .burger-btn {
             background: none;
             border: none;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: white;
             cursor: pointer;
-            margin-right: 1rem;
-            display: flex;
-            align-items: center;
         }
 
         nav {
             position: fixed;
-            top: 0; /* Deckt den Header im mobilen Modus ab für saubere Optik */
+            top: 0;
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
@@ -86,11 +84,11 @@
 
         @media (min-width: 1024px) {
             .mobile-header, .nav-overlay { display: none !important; }
-            nav { transform: translateX(0); z-index: 100; top: 0; }
+            nav { transform: translateX(0); z-index: 100; }
             main { margin-left: var(--sidebar-width); }
         }
 
-        /* --- MENU LOGIC --- */
+        /* --- MENU DESIGN --- */
         .menu-list { list-style: none; padding: 0; margin: 0; }
         .menu-link {
             text-decoration: none;
@@ -99,7 +97,7 @@
             padding: 0.5rem 0.8rem;
             border-radius: 6px;
             opacity: 0.8;
-            transition: all 0.2s;
+            margin-bottom: 2px;
         }
         .menu-link:hover, .menu-link.active {
             opacity: 1;
@@ -110,82 +108,96 @@
             margin-left: 1rem;
             padding-left: 0.5rem;
             border-left: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 0.5rem;
         }
 
         /* --- CONTENT AREA --- */
-        main {
-            padding: 2rem;
-            flex-grow: 1;
-        }
-        article {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+        main { padding: 2rem; flex-grow: 1; }
+        article { max-width: 800px; margin: 0 auto; line-height: 1.7; font-size: 1.15rem; }
+        h1 { margin-top: 0; font-size: 2.2rem; }
 
-        /* --- FOOTER NAV --- */
+        /* --- FOOTER NAVIGATION --- */
         .footer-nav {
-            margin-top: 4rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            border-top: 1px solid var(--border-color);
+            margin-top: 5rem;
             padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
         }
-        .nav-btn {
+        .nav-card {
             flex: 1;
-            padding: 1rem;
+            padding: 1.2rem;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
             color: var(--text-color);
             background: var(--bg-color);
+            transition: border-color 0.2s;
         }
-        .nav-btn:hover { border-color: var(--accent-color); }
-        .nav-btn.next { text-align: right; }
-        .btn-label { display: block; font-size: 0.7rem; opacity: 0.5; text-transform: uppercase; }
-        .btn-title { font-weight: bold; }
+        .nav-card:hover { border-color: var(--accent-color); }
+        .nav-card.next { text-align: right; }
+        .nav-label { display: block; font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .nav-title { font-weight: bold; font-size: 0.95rem; }
+
+        /* --- THEME TOGGLE --- */
+        #theme-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        @media (min-width: 1024px) {
+            #theme-btn { 
+                position: fixed; 
+                bottom: 2rem; 
+                left: 1.5rem; 
+                z-index: 3000;
+                color: var(--nav-text);
+            }
+        }
     </style>
 </head>
 <body id="body-tag">
 
-    {% comment %} Normalisierung der Seitenliste {% endcomment %}
+    {% comment %} Alle Seiten mit nav_order sammeln und sortieren {% endcomment %}
     {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
 
     <header class="mobile-header">
         <button class="burger-btn" id="burger-toggle">☰</button>
         <span style="font-weight: bold;">{{ site.title }}</span>
+        <button id="theme-btn-mobile" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">💡</button>
     </header>
 
     <div class="nav-overlay" id="nav-overlay"></div>
 
     <nav>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <span style="font-size: 1.4rem; font-weight: bold;">{{ site.title }}</span>
-            {% comment %} Schließen-Button nur Mobil {% endcomment %}
-            <button class="burger-btn" onclick="document.getElementById('body-tag').classList.remove('nav-active')" style="margin:0; font-size: 1.2rem;">✕</button>
+            <span style="font-size: 1.3rem; font-weight: bold;">{{ site.title }}</span>
+            <button class="burger-btn" onclick="document.getElementById('body-tag').classList.remove('nav-active')" style="font-size: 1.2rem;">✕</button>
         </div>
         
         <ul class="menu-list">
             {% for p in all_pages %}
-                {% comment %} Wir erkennen Top-Level an der Pfad-Tiefe oder wenn es eine index-Datei ist {% endcomment %}
                 {% assign parts = p.url | split: "/" %}
+                {% comment %} Wir suchen Top-Level-Einträge {% endcomment %}
                 {% if parts.size <= 2 or p.url contains "index" %}
-                    {% comment %} Prüfen, ob dies wirklich die 'Eltern-Seite' für diesen Pfad ist {% endcomment %}
-                    <li style="margin-bottom: 0.5rem;">
+                    <li>
                         <a href="{{ p.url | relative_url }}" class="menu-link {% if page.url == p.url %}active{% endif %}">
-                            {{ p.title }}
+                            {{ p.menu_title | default: p.title }}
                         </a>
                         
-                        {% comment %} Unterseiten suchen: Alles im gleichen Verzeichnis {% endcomment %}
+                        {% comment %} Untermenü-Logik {% endcomment %}
                         {% assign folder = p.url | replace: "index.html", "" | replace: ".html", "" %}
                         {% if folder != "/" %}
                             <div class="nested-group">
                                 {% for child in all_pages %}
                                     {% if child.url contains folder and child.url != p.url %}
-                                        <a href="{{ child.url | relative_url }}" class="menu-link {% if page.url == child.url %}active{% endif %}" style="font-size: 0.9rem;">
-                                            {{ child.title }}
+                                        <a href="{{ child.url | relative_url }}" class="menu-link {% if page.url == child.url %}active{% endif %}" style="font-size: 0.85rem;">
+                                            {{ child.menu_title | default: child.title }}
                                         </a>
                                     {% endif %}
                                 {% endfor %}
@@ -195,14 +207,16 @@
                 {% endif %}
             {% endfor %}
         </ul>
+        
+        <button id="theme-btn" class="desktop-only-btn">💡</button>
     </nav>
 
     <main>
         <article>
+            <h1>{{ page.title }}</h1>
             {{ content }}
-            
+
             <div class="footer-nav">
-                {% comment %} Fix für den Previous/Next Button: Exakter URL-Vergleich {% endcomment %}
                 {% for item in all_pages %}
                     {% assign item_url = item.url | replace: "index.html", "" %}
                     {% assign current_url = page.url | replace: "index.html", "" %}
@@ -213,18 +227,18 @@
                         {% assign next_idx = curr_idx | plus: 1 %}
 
                         {% if prev_idx >= 0 %}
-                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-btn">
-                                <span class="btn-label">Zurück</span>
-                                <span class="btn-title">{{ all_pages[prev_idx].title }}</span>
+                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-card">
+                                <span class="nav-label">Zurück</span>
+                                <span class="nav-title">{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
                             </a>
                         {% else %}
                             <div style="flex:1"></div>
                         {% endif %}
 
                         {% if next_idx < all_pages.size %}
-                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-btn next">
-                                <span class="btn-label">Weiter</span>
-                                <span class="btn-title">{{ all_pages[next_idx].title }}</span>
+                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-card next">
+                                <span class="nav-label">Weiter</span>
+                                <span class="nav-title">{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
                             </a>
                         {% endif %}
                     {% endif %}
@@ -237,9 +251,26 @@
         const body = document.getElementById('body-tag');
         const burger = document.getElementById('burger-toggle');
         const overlay = document.getElementById('nav-overlay');
+        const themeBtns = [document.getElementById('theme-btn'), document.getElementById('theme-btn-mobile')];
 
+        // Sidebar Toggle
         burger.addEventListener('click', () => body.classList.add('nav-active'));
         overlay.addEventListener('click', () => body.classList.remove('nav-active'));
+
+        // Theme Switcher
+        const toggleTheme = () => {
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        };
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+
+        themeBtns.forEach(btn => {
+            if(btn) btn.addEventListener('click', toggleTheme);
+        });
     </script>
 </body>
 </html>
