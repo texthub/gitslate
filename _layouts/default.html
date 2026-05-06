@@ -14,7 +14,6 @@
             --accent-color: #3b82f6;
             --border-color: #e2e8f0;
             --sidebar-width: 260px;
-            --font-size-base: 1rem;
         }
 
         [data-theme="dark"] {
@@ -29,13 +28,11 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Inter', -apple-system, sans-serif;
-            font-size: var(--font-size-base);
-            line-height: 1.6;
             display: flex;
-            transition: background 0.3s;
+            transition: background 0.2s;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- SIDEBAR --- */
         nav {
             position: fixed;
             width: var(--sidebar-width);
@@ -49,53 +46,53 @@
             z-index: 1000;
         }
 
-        .menu-header {
+        .menu-brand {
             color: #ffffff;
             font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .menu-list { list-style: none; padding: 0; margin: 0; }
-        .menu-item { margin-bottom: 0.25rem; }
         .menu-link {
             text-decoration: none;
             color: inherit;
             display: block;
             padding: 0.4rem 0.75rem;
             border-radius: 4px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            font-size: 0.85rem;
+            margin-bottom: 2px;
         }
         .menu-link:hover { color: var(--nav-active); background: rgba(255,255,255,0.05); }
         .menu-link.active { color: var(--nav-active); background: var(--accent-color); font-weight: 600; }
 
-        .dir-label {
-            font-size: 0.7rem;
+        .dir-divider {
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             margin: 1.5rem 0 0.5rem 0.75rem;
-            color: #64748b;
+            color: #475569;
+            font-weight: bold;
         }
 
-        /* --- MOBILE HEADER --- */
-        .mobile-top {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 50px;
-            background: var(--sidebar-bg);
+        /* --- THEME TOGGLE (SILHOUETTE) --- */
+        #theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            /* Erzwingt eine einfache zwei-farb-optik für das Emoji */
+            filter: grayscale(1) brightness(2) contrast(10);
+            padding: 0;
             color: white;
-            padding: 0 1rem;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 2000;
+            opacity: 0.7;
         }
+        #theme-toggle:hover { opacity: 1; }
 
-        /* --- CONTENT --- */
+        /* --- MAIN CONTENT --- */
         main {
             flex-grow: 1;
             margin-left: var(--sidebar-width);
@@ -106,67 +103,58 @@
             align-items: center;
         }
 
-        article { width: 100%; max-width: 720px; }
+        article { width: 100%; max-width: 750px; flex-grow: 1; }
         
-        .page-title {
-            font-size: 2.25rem;
+        .entry-title {
+            font-size: 2.5rem;
             font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-            color: var(--accent-color);
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            letter-spacing: -0.03em;
         }
 
-        .meta-info {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
+        /* --- FOOTER & NAV BUTTONS --- */
+        .site-footer {
+            margin-top: 6rem;
+            width: 100%;
+            max-width: 750px;
         }
 
-        /* --- PREV/NEXT BUTTONS --- */
         .page-nav {
-            margin-top: 5rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--border-color);
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+            margin-bottom: 3rem;
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
+            padding: 0.8rem 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             text-decoration: none;
             color: var(--text-color);
-            font-size: 0.9rem;
-            background: rgba(0,0,0,0.02);
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.01);
             transition: all 0.2s;
         }
-        .nav-btn:hover { border-color: var(--accent-color); background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .nav-btn.next { justify-content: flex-end; text-align: right; }
-        .nav-arrow { font-size: 1.2rem; font-weight: bold; }
+        .nav-btn:hover { border-color: var(--accent-color); background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .nav-btn.next { justify-content: flex-end; }
+        .nav-arrow { font-size: 1rem; font-weight: bold; }
 
-        /* --- THEME TOGGLE --- */
-        #theme-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            filter: grayscale(1) brightness(2); /* Macht das Emoji zweifarbig/weißlich */
-            padding: 0;
-            transition: transform 0.3s;
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0 4rem 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
         }
-        #theme-toggle:hover { transform: rotate(15deg); }
 
         @media (max-width: 1024px) {
-            nav { transform: translateX(-100%); transition: 0.3s; }
-            body.nav-active nav { transform: translateX(0); }
-            main { margin-left: 0; padding-top: 5rem; }
-            .mobile-top { display: flex; }
+            nav { display: none; } /* Mobile Logik hier vereinfacht */
+            main { margin-left: 0; padding: 2rem 1rem; }
         }
     </style>
 </head>
@@ -174,28 +162,20 @@
 
     {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
 
-    <div class="mobile-top">
-        <button onclick="document.body.classList.toggle('nav-active')" style="background:none; border:none; color:white; font-size:1.5rem;">☰</button>
-        <span>{{ site.title }}</span>
-        <button onclick="toggleTheme()" style="background:none; border:none; font-size:1.2rem;">💡</button>
-    </div>
-
     <nav>
-        <div class="menu-header">
+        <div class="menu-brand">
             <span>{{ site.title }}</span>
             <button id="theme-toggle" onclick="toggleTheme()">💡</button>
         </div>
 
         <ul class="menu-list">
-            {% comment %} 
-                Hierarchische Navigation: 
-                Wir gruppieren Seiten nach ihrem ersten Verzeichnispfad 
-            {% endcomment %}
             {% assign last_dir = "" %}
             {% for p in all_pages %}
-                {% assign current_dir = p.url | split: "/" | slice: 1 | first %}
+                {% assign parts = p.url | split: "/" %}
+                {% assign current_dir = parts[1] %}
+                
                 {% if current_dir != last_dir and current_dir != nil %}
-                    <li class="dir-label">{{ current_dir | replace: "-", " " }}</li>
+                    <li class="dir-divider">{{ current_dir | replace: "-", " " }}</li>
                     {% assign last_dir = current_dir %}
                 {% endif %}
                 
@@ -210,18 +190,14 @@
 
     <main>
         <article>
-            {% if page.title %}
-                <h1 class="page-title">{{ page.title }}</h1>
-            {% endif %}
+            <h1 class="entry-title">{{ page.title }}</h1>
             
-            <div class="meta-info">
-                Zuletzt aktualisiert: {{ page.date | date: "%d.%m.%Y" }}
-            </div>
-
             <div class="content-body">
                 {{ content }}
             </div>
+        </article>
 
+        <footer class="site-footer">
             <div class="page-nav">
                 {% for item in all_pages %}
                     {% if item.url == page.url %}
@@ -231,32 +207,39 @@
 
                         {% if prev_idx >= 0 %}
                             <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-btn">
-                                <span class="nav-arrow" style="margin-right:0.5rem">←</span>
-                                <span>{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
+                                <span class="nav-arrow">←</span>
+                                <span style="margin-left: 0.7rem;">{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
                             </a>
                         {% else %}<div></div>{% endif %}
 
                         {% if next_idx < all_pages.size %}
                             <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-btn next">
-                                <span>{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
-                                <span class="nav-arrow" style="margin-left:0.5rem">→</span>
+                                <span style="margin-right: 0.7rem;">{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
+                                <span class="nav-arrow">→</span>
                             </a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
-        </article>
+
+            <div class="footer-bottom">
+                <div>
+                    <strong>Zuletzt aktualisiert:</strong> {{ page.date | date: "%d.%m.%Y" }}
+                </div>
+                <div>
+                    &copy; {{ site.time | date: "%Y" }} {{ site.author | default: site.title }}
+                </div>
+            </div>
+        </footer>
     </main>
 
     <script>
         function toggleTheme() {
             const body = document.getElementById('body-tag');
-            const current = body.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
+            const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
         }
-
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.getElementById('body-tag').setAttribute('data-theme', savedTheme);
     </script>
