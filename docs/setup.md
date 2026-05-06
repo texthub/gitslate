@@ -1,10 +1,8 @@
 ---
 layout: default
-title: "Getting Started"
-nav_order: 10
+title: "Getting Started with Gitslate"
+nav_order: 30
 ---
-
-# Getting Started with Gitslate
 
 This guide explains how to integrate **Gitslate** into your workflow. Whether you are starting a fresh project or adding a reading interface to a repository full of existing text, the process is designed to be straightforward.
 
