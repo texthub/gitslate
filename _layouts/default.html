@@ -30,270 +30,274 @@
             color: var(--text-color);
             font-family: var(--font-main);
             transition: background 0.3s, color 0.3s;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- MOBILE HEADER --- */
         .mobile-header {
-            display: flex;
+            display: none;
             align-items: center;
             padding: 1rem;
             background: var(--sidebar-bg);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+        }
+
+        @media (max-width: 1023px) {
+            .mobile-header { display: flex; }
         }
 
         .burger-btn {
             background: none;
             border: none;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--text-color);
             cursor: pointer;
             margin-right: 1rem;
         }
 
+        /* --- SIDEBAR NAVIGATION --- */
         nav {
             position: fixed;
             top: 0;
-            left: -100%;
+            left: 0;
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
             padding: 2rem 1.5rem;
-            z-index: 200;
-            transition: left 0.3s ease-in-out;
             overflow-y: auto;
-            box-sizing: border-box;
+            z-index: 500;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 1023px) {
+            nav { transform: translateX(-100%); }
+            body.nav-active nav { transform: translateX(0); }
         }
 
         .nav-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            inset: 0;
             background: rgba(0,0,0,0.5);
             display: none;
-            z-index: 150;
+            z-index: 400;
         }
 
-        body.nav-active nav { left: 0; }
         body.nav-active .nav-overlay { display: block; }
 
-        @media (min-width: 1024px) {
-            .mobile-header, .nav-overlay { display: none !important; }
-            nav { left: 0 !important; }
-            main { margin-left: var(--sidebar-width); }
+        .menu-list { list-style: none; padding: 0; margin: 0; }
+        .menu-item { margin-bottom: 0.5rem; }
+        .menu-link {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+        .menu-link:hover { background: var(--border-color); }
+        .menu-link.active { 
+            color: var(--accent-color); 
+            font-weight: 600; 
+            background: rgba(37, 99, 235, 0.1); 
         }
 
-        /* --- CONTENT AREA --- */
+        /* Nested Levels */
+        .nested-group {
+            margin-left: 1rem;
+            padding-left: 0.5rem;
+            border-left: 1px solid var(--border-color);
+            margin-top: 0.2rem;
+        }
+
+        /* --- CONTENT --- */
         main {
-            padding: 2rem;
-            max-width: 850px;
-            margin: 0 auto;
-            box-sizing: border-box;
-            min-height: 100vh;
+            margin-left: var(--sidebar-width);
+            padding: 3rem 2rem;
+            flex-grow: 1;
+            max-width: 1000px;
+        }
+
+        @media (max-width: 1023px) {
+            main { margin-left: 0; padding: 2rem 1rem; }
         }
 
         article {
             font-family: var(--font-read);
-            font-size: 1.15rem;
-            line-height: 1.7;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 700px;
         }
 
-        /* --- NESTED MENU --- */
-        .menu-section { margin-bottom: 2rem; }
-        .menu-label { 
-            font-size: 0.75rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em; 
-            opacity: 0.6; 
-            margin-bottom: 0.8rem;
-            font-weight: bold;
-        }
-        .menu-list { list-style: none; padding: 0; margin: 0; }
-        .menu-list li { margin-bottom: 0.2rem; }
-        .menu-list a { 
-            text-decoration: none; 
-            color: var(--text-color); 
-            display: block; 
-            padding: 0.3rem 0; 
-        }
-        .menu-list a:hover { color: var(--accent-color); }
-        
-        /* Verschachtelung */
-        .nested-list {
-            list-style: none;
-            padding-left: 1.2rem;
-            border-left: 1px solid var(--border-color);
-            margin: 0.3rem 0 0.8rem 0;
+        /* --- FOOTER NAVIGATION --- */
+        .page-footer {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
         }
 
-        /* --- NAV BUTTONS --- */
-        .slate-footer { margin-top: 4rem; padding-bottom: 3rem; }
-        .chapter-nav .nav-links {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-top: 2rem;
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
-        .nav-btn {
+
+        .nav-card {
             text-decoration: none;
             color: var(--text-color);
-            padding: 1rem;
+            padding: 1.2rem;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            flex: 1;
+            border-radius: 12px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            transition: all 0.2s;
             background: var(--sidebar-bg);
-            transition: transform 0.1s, border-color 0.2s;
         }
-        .nav-btn:hover { border-color: var(--accent-color); }
-        .nav-content { display: flex; flex-direction: column; overflow: hidden; }
-        .nav-label { font-size: 0.7rem; opacity: 0.5; text-transform: uppercase; }
-        .nav-title { font-weight: 600; font-size: 0.9rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-        .nav-btn-next { justify-content: flex-end; text-align: right; }
-        .nav-spacer { flex: 1; }
+
+        .nav-card:hover { border-color: var(--accent-color); transform: translateY(-2px); }
+        .nav-card.next { text-align: right; align-items: flex-end; }
+        .nav-card .label { font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .nav-card .title { font-weight: 700; font-size: 1rem; }
 
         @media (max-width: 600px) {
-            .chapter-nav .nav-links { flex-direction: column; }
+            .nav-buttons { grid-template-columns: 1fr; }
         }
 
-        .footer-meta { margin-top: 3rem; font-size: 0.8rem; opacity: 0.4; text-align: center; }
-        .theme-controls { position: fixed; top: 1rem; right: 1rem; z-index: 300; }
+        .theme-toggle {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.2rem;
+            z-index: 1100;
+        }
+
         #theme-btn {
             background: var(--sidebar-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body id="body-tag">
 
+    {% comment %} 
+        MASTER-LISTE DER SEITEN (Single Source of Truth)
+        Wir filtern alle Seiten, die eine nav_order haben und sortieren sie.
+    {% endcomment %}
+    {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
+
     <header class="mobile-header">
         <button class="burger-btn" id="burger-toggle">☰</button>
-        <span style="font-weight: bold;">{{ site.ui.menu_header | default: site.title }}</span>
+        <span style="font-weight: bold;">{{ site.title }}</span>
     </header>
 
     <div class="nav-overlay" id="nav-overlay"></div>
 
-    <div class="theme-controls">
-        <button id="theme-btn">{{ site.ui.theme_button | default: "Mode" }}</button>
+    <div class="theme-toggle">
+        <button id="theme-btn">Modus</button>
     </div>
 
     <nav>
-        <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">{{ site.ui.menu_header | default: site.title }}</h2>
-        {% for section in site.data.navigation.main_menu %}
-        <div class="menu-section">
-            <div class="menu-label">{{ section.title }}</div>
-            <ul class="menu-list">
-                {% for item in section.sub_items %}
-                <li>
-                    <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
-                    {% if item.children %}
-                    <ul class="nested-list">
-                        {% for child in item.children %}
-                        <li><a href="{{ child.url | relative_url }}">{{ child.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endfor %}
+        <h2 style="margin-bottom: 2rem; font-size: 1.4rem;">{{ site.title }}</h2>
+        <ul class="menu-list">
+            {% for p in all_pages %}
+                {% comment %} Wir prüfen, ob die Seite eine Top-Level Seite ist (kein Unterverzeichnis oder Index) {% endcomment %}
+                {% assign path_array = p.url | split: "/" %}
+                {% if path_array.size <= 2 %}
+                    <li class="menu-item">
+                        <a href="{{ p.url | relative_url }}" class="menu-link {% if page.url == p.url %}active{% endif %}">
+                            {{ p.title }}
+                        </a>
+                        
+                        {% comment %} Suche nach Kindern: Alles, was im Pfad dieser Seite liegt {% endcomment %}
+                        {% assign folder_path = p.url | replace: "index.html", "" %}
+                        {% if folder_path != "/" %}
+                            <div class="nested-group">
+                                {% for child in all_pages %}
+                                    {% if child.url contains folder_path and child.url != p.url %}
+                                        <a href="{{ child.url | relative_url }}" class="menu-link {% if page.url == child.url %}active{% endif %}" style="font-size: 0.85rem;">
+                                            {{ child.title }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     </nav>
 
     <main>
         <article>
+            <h1>{{ page.title }}</h1>
             {{ content }}
         </article>
 
-        <footer class="slate-footer">
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 2rem;">
-            
-            <div class="chapter-nav">
-                {% assign nav_items = "" | split: "," %}
-                {% for section in site.data.navigation.main_menu %}
-                    {% for item in section.sub_items %}
-                        {% assign nav_items = nav_items | push: item %}
-                        {% if item.children %}
-                            {% for child in item.children %}
-                                {% assign nav_items = nav_items | push: child %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
+        <footer class="page-footer">
+            <div class="nav-buttons">
+                {% comment %} Logik für Previous / Next basierend auf der sortierten Liste {% endcomment %}
+                {% for item in all_pages %}
+                    {% if item.url == page.url %}
+                        {% assign curr_idx = forloop.index0 %}
+                        {% assign prev_idx = curr_idx | minus: 1 %}
+                        {% assign next_idx = curr_idx | plus: 1 %}
 
-                {% for item in nav_items %}
-                    {% assign item_url = item.url | relative_url | replace: "index.html", "" %}
-                    {% assign page_url = page.url | relative_url | replace: "index.html", "" %}
-                
-                    {% if item_url == page_url %}
-                        {% assign curr_index = forloop.index0 %}
-                        {% assign prev_index = curr_index | minus: 1 %}
-                        {% assign next_index = curr_index | plus: 1 %}
-                
-                        <div class="nav-links">
-                            {% if prev_index >= 0 %}
-                            <a href="{{ nav_items[prev_index].url | relative_url }}" class="nav-btn">
-                                <span style="margin-right: 0.5rem;">←</span>
-                                <div class="nav-content">
-                                    <span class="nav-label">{{ site.ui.prev_label | default: "Zurück" }}</span>
-                                    <span class="nav-title">{{ nav_items[prev_index].title }}</span>
-                                </div>
+                        {% if prev_idx >= 0 %}
+                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-card">
+                                <span class="label">Zurück</span>
+                                <span class="title">{{ all_pages[prev_idx].title }}</span>
                             </a>
-                            {% else %}
-                            <div class="nav-spacer"></div>
-                            {% endif %}
-                
-                            {% if next_index < nav_items.size %}
-                            <a href="{{ nav_items[next_index].url | relative_url }}" class="nav-btn nav-btn-next">
-                                <div class="nav-content">
-                                    <span class="nav-label">{{ site.ui.next_label | default: "Weiter" }}</span>
-                                    <span class="nav-title">{{ nav_items[next_index].title }}</span>
-                                </div>
-                                <span style="margin-left: 0.5rem;">→</span>
+                        {% else %}
+                            <div></div>
+                        {% endif %}
+
+                        {% if next_idx < all_pages.size %}
+                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-card next">
+                                <span class="label">Weiter</span>
+                                <span class="title">{{ all_pages[next_idx].title }}</span>
                             </a>
-                            {% else %}
-                            <div class="nav-spacer"></div>
-                            {% endif %}
-                        </div>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
-
-            <div class="footer-meta">
-                <p>&copy; {{ site.time | date: "%Y" }} {{ site.author }}</p>
-            </div>
+            <p style="text-align: center; opacity: 0.3; font-size: 0.8rem; margin-top: 4rem;">
+                &copy; {{ site.time | date: "%Y" }} {{ site.author }}
+            </p>
         </footer>
     </main>
 
     <script>
-        const bodyTag = document.getElementById('body-tag');
+        const body = document.getElementById('body-tag');
         const themeBtn = document.getElementById('theme-btn');
         const burgerBtn = document.getElementById('burger-toggle');
         const overlay = document.getElementById('nav-overlay');
 
-        if(burgerBtn) {
-            burgerBtn.addEventListener('click', () => bodyTag.classList.toggle('nav-active'));
-        }
-        if(overlay) {
-            overlay.addEventListener('click', () => bodyTag.classList.remove('nav-active'));
-        }
+        // Sidebar Toggle
+        burgerBtn.addEventListener('click', () => body.classList.toggle('nav-active'));
+        overlay.addEventListener('click', () => body.classList.remove('nav-active'));
 
-        // Theme-Logic
-        const currentTheme = localStorage.getItem("theme") || "light";
-        bodyTag.setAttribute('data-theme', currentTheme);
+        // Theme Switcher (LocalStorage für Beständigkeit)
+        const setTheme = (theme) => {
+            body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        };
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
 
         themeBtn.addEventListener('click', () => {
-            const next = bodyTag.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            bodyTag.setAttribute('data-theme', next);
-            localStorage.setItem("theme", next);
+            const current = body.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
         });
     </script>
 </body>
