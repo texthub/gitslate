@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "Content 1 - Index Page"
 menu_title: "Content1-Test"
 nav_order: 20
+date: 2026-05-03
 ---
 # Content 1 - Index Page
 
