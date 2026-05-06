@@ -38,7 +38,10 @@ For Gitslate to wrap your existing texts, add this **Front Matter** block to the
 ```markdown
 ---
 layout: default
-title: Name of this Page
+menu_title: "as it appears in the menue"
+title: "Name of the page"
+nav_order: 30
+date: YYYY-mm-dd
 ---
 ```
 
