@@ -5,6 +5,8 @@ main_menu:
     sub_items:
       - title: "Home Page"
         url: "/"
+      - title: "Content Page"
+        url: "/content1/index"
       - title: "Getting Started"
         url: "/docs/setup"
 ---
