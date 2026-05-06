@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Getting Started with Gitslate"
+menu_title: "Setup-Gitslate"
 nav_order: 30
 ---
 
