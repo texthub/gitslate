@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Setup Guide
+title: "Getting Started"
+nav_order: 10
 ---
 
 # Getting Started with Gitslate
