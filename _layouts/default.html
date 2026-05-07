@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>{{ page.title }} | {{ site.title }}</title>
     <style>
         :root {
@@ -14,7 +14,7 @@
             --accent-color: #3b82f6;
             --border-color: #e2e8f0;
             --btn-bg: #f8fafc;
-            --sidebar-width: 260px;
+            --sidebar-width: 280px;
             --border-thick: 2px;
         }
 
@@ -26,6 +26,9 @@
             --btn-bg: #1e293b;
         }
 
+        /* --- BASE RESET --- */
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
             background-color: var(--bg-color);
@@ -34,28 +37,16 @@
             display: flex;
             flex-direction: column;
             transition: background 0.2s;
-            /* Prevent horizontal overflow globally */
             overflow-x: hidden; 
+            width: 100%;
         }
 
-        /* --- MONOSPACE & CODE WRAPPING FIX --- */
-        pre, code, kbd, samp {
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            /* Forces text to wrap instead of pushing the container wide */
+        /* --- CODE & TEXT WRAPPING --- */
+        pre, code {
+            font-family: monospace;
             white-space: pre-wrap !important; 
             word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
         }
-
-        pre {
-            background: rgba(0,0,0,0.03);
-            padding: 1rem;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            margin: 1.5rem 0;
-        }
-
-        [data-theme="dark"] pre { background: rgba(255,255,255,0.03); }
 
         /* --- MOBILE HEADER --- */
         .mobile-header {
@@ -65,7 +56,7 @@
             height: 60px;
             background: var(--sidebar-bg);
             color: white;
-            padding: 0 1.2rem;
+            padding: 0 1rem;
             align-items: center;
             justify-content: space-between;
             z-index: 2000;
@@ -78,7 +69,9 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
         }
 
         /* --- SIDEBAR --- */
@@ -88,21 +81,22 @@
             height: 100vh;
             background: var(--sidebar-bg);
             color: var(--nav-text);
-            padding: 2rem 1.5rem;
-            box-sizing: border-box;
+            padding: 1.5rem;
             overflow-y: auto;
             z-index: 3000;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(-100%);
             border-right: 1px solid var(--border-color);
+            -webkit-overflow-scrolling: touch; /* Smooth scroll for iOS */
         }
 
         .nav-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             z-index: 2500;
             display: none;
+            backdrop-filter: blur(2px);
         }
 
         body.nav-active nav { transform: translateX(0); }
@@ -114,168 +108,71 @@
             main { margin-left: var(--sidebar-width); }
         }
 
-        /* --- MENU STYLE --- */
-        .menu-brand { color: #ffffff; font-weight: 800; font-size: 1.2rem; margin-bottom: 2.5rem; display: block; }
-        .menu-list { list-style: none; padding: 0; margin: 0; }
+        /* --- MENU REFINEMENT (MOBILE FOCUS) --- */
+        .menu-brand { color: #ffffff; font-weight: 800; font-size: 1.1rem; margin-bottom: 2rem; display: block; }
+        .menu-list { list-style: none; padding: 0; margin: 0 0 4rem 0; width: 100%; }
+        
         .menu-link {
             text-decoration: none;
             color: inherit;
             display: block;
-            padding: 0.5rem 0.8rem;
+            padding: 0.6rem 0.8rem;
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 2px;
+            overflow-wrap: break-word; /* Protect long titles */
         }
+
+        .dir-label { 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            margin: 1.5rem 0 0.5rem 0.8rem; 
+            color: #475569; 
+            font-weight: bold; 
+        }
+
+        /* Mobile specific font/padding adjustments */
+        @media (max-width: 600px) {
+            nav { width: 85%; max-width: 300px; padding: 1rem; }
+            .menu-link { font-size: 0.85rem; padding: 0.5rem 0.6rem; }
+            .menu-brand { font-size: 1rem; margin-bottom: 1.5rem; }
+        }
+
         .menu-link:hover { color: var(--nav-active); background: rgba(255,255,255,0.05); }
         .menu-link.active { color: var(--nav-active); background: var(--accent-color); font-weight: 600; }
-        .dir-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin: 1.8rem 0 0.6rem 0.8rem; color: #475569; font-weight: bold; }
 
-        /* --- THEME TOGGLE (Simplified Silhouette) --- */
-        .theme-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; filter: grayscale(1) brightness(3) contrast(5); display: flex; align-items: center; }
-
-        /* --- CONTENT AREA --- */
+        /* --- CONTENT --- */
         main {
             flex-grow: 1;
-            padding: 6rem 1.5rem 2rem 1.5rem;
+            padding: 80px 1.2rem 2rem 1.2rem;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Ensures content never overflows the body */
-            max-width: 100%;
-            box-sizing: border-box;
+            width: 100%;
         }
 
         @media (min-width: 1024px) { main { padding: 4rem 2rem; } }
 
-        article { width: 100%; max-width: 750px; flex-grow: 1; word-wrap: break-word; }
-        .entry-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.03em; line-height: 1.2; }
+        article { width: 100%; max-width: 750px; flex-grow: 1; }
+        .entry-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; line-height: 1.1; }
 
-        /* --- RECTANGULAR NAVIGATION BUTTONS --- */
-        .page-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 5rem 0 3rem 0; width: 100%; }
+        @media (max-width: 600px) { .entry-title { font-size: 1.7rem; } }
+
+        /* --- NAV BUTTONS --- */
+        .page-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 4rem 0 3rem 0; width: 100%; }
         .nav-card {
             display: flex;
             align-items: center;
-            padding: 1.2rem;
+            padding: 1rem;
             border: var(--border-thick) solid var(--border-color);
             border-radius: 4px;
             text-decoration: none;
             color: var(--text-color);
             background: var(--btn-bg);
             font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s ease-in-out;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
         }
-
-        .nav-card:hover { border-color: var(--accent-color); transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15); background: var(--bg-color); }
-        .nav-card.next { justify-content: flex-end; text-align: right; }
-
-        /* --- FOOTER --- */
-        .site-footer {
-            width: 100%;
-            max-width: 750px;
-            border-top: 1px solid var(--border-color);
-            padding: 2rem 0 4rem 0;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        @media (max-width: 600px) {
-            .page-navigation { grid-template-columns: 1fr; }
-            .site-footer { flex-direction: column; gap: 1rem; }
-            .entry-title { font-size: 1.8rem; }
-        }
-    </style>
-</head>
-<body id="body-tag">
-
-    {% assign all_pages = site.pages | where_exp: "p", "p.nav_order != nil" | sort: "nav_order" %}
-
-    <header class="mobile-header">
-        <button class="burger-btn" onclick="document.body.classList.add('nav-active')">☰</button>
-        <span style="font-weight: bold;">{{ site.title }}</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">💡</button>
-    </header>
-
-    <div class="nav-overlay" onclick="document.body.classList.remove('nav-active')"></div>
-
-    <nav id="sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
-            <span class="menu-brand">{{ site.title }}</span>
-            <button class="theme-toggle-btn" onclick="toggleTheme()">💡</button>
-        </div>
-
-        <ul class="menu-list">
-            {% assign last_dir = "" %}
-            {% for p in all_pages %}
-                {% assign parts = p.url | split: "/" %}
-                {% assign current_dir = parts[1] %}
-                {% if current_dir != last_dir and current_dir != nil %}
-                    <li class="dir-label">{{ current_dir | replace: "-", " " }}</li>
-                    {% assign last_dir = current_dir %}
-                {% endif %}
-                <li class="menu-item">
-                    <a href="{{ p.url | relative_url }}" class="menu-link {% if page.url == p.url %}active{% endif %}">
-                        {{ p.menu_title | default: p.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </nav>
-
-    <main>
-        <article>
-            <h1 class="entry-title">{{ page.title }}</h1>
-            <div class="content-body">
-                {{ content }}
-            </div>
-
-            <div class="page-navigation">
-                {% for item in all_pages %}
-                    {% if item.url == page.url %}
-                        {% assign idx = forloop.index0 %}
-                        {% assign prev_idx = idx | minus: 1 %}
-                        {% assign next_idx = idx | plus: 1 %}
-
-                        {% if prev_idx >= 0 %}
-                            <a href="{{ all_pages[prev_idx].url | relative_url }}" class="nav-card">
-                                <span>←</span>
-                                <span style="margin-left: 1rem;">{{ all_pages[prev_idx].menu_title | default: all_pages[prev_idx].title }}</span>
-                            </a>
-                        {% else %}<div></div>{% endif %}
-
-                        {% if next_idx < all_pages.size %}
-                            <a href="{{ all_pages[next_idx].url | relative_url }}" class="nav-card next">
-                                <span style="margin-right: 1rem;">{{ all_pages[next_idx].menu_title | default: all_pages[next_idx].title }}</span>
-                                <span>→</span>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </article>
-
-        <footer class="site-footer">
-            <div>
-                <strong>Last Modified:</strong> {{ page.last_modified_at | date: "%Y-%m-%d" | default: page.date | date: "%Y-%m-%d" }}
-            </div>
-            <div>
-                &copy; {{ site.time | date: "%Y" }} {{ site.author | default: site.title }}
-            </div>
-        </footer>
-    </main>
-
-    <script>
-        function toggleTheme() {
-            const body = document.getElementById('body-tag');
-            const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        }
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.getElementById('body-tag').setAttribute('data-theme', savedTheme);
-    </script>
-</body>
-</html>
+        .nav-card:hover { border-color: var(--accent-color); transform: translateY
